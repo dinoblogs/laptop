@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://js.hcaptcha.com/1/api.js?reportapi=https%3A%2F%2Faccounts.hcaptcha.com&custom=False"
+        type="text/javascript" async defer></script>
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <style>
+        body {
+            margin: 40px;
+        }
+
+        .stepwizard-step p {
+            margin-top: 10px;
+        }
+
+        .stepwizard-row {
+            display: table-row;
+        }
+
+        .stepwizard {
+            display: table;
+            width: 100%;
+            position: relative;
+        }
+
+        .stepwizard-step button[disabled] {
+            opacity: 1 !important;
+            filter: alpha(opacity=100) !important;
+        }
+
+        .stepwizard-row:before {
+            top: 14px;
+            bottom: 0;
+            position: absolute;
+            content: " ";
+            width: 100%;
+            height: 1px;
+            background-color: #ccc;
+            z-order: 0;
+
+        }
+
+        .stepwizard-step {
+            display: table-cell;
+            text-align: center;
+            position: relative;
+        }
+
+        .btn-circle {
+            width: 30px;
+            height: 30px;
+            text-align: center;
+            padding: 6px 0;
+            font-size: 12px;
+            line-height: 1.428571429;
+            border-radius: 15px;
+        }
+
+        .captcha {
+            background-color: #f9f9f9;
+            border: 2px solid #d3d3d3;
+            border-radius: 5px;
+            color: #4c4a4b;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        @media screen and (max-width: 500px) {
+            .captcha {
+                flex-direction: column;
+            }
+
+            .text {
+                margin: .5em !important;
+                text-align: center;
+            }
+
+            .logo {
+                align-self: center !important;
+            }
+
+            .spinner {
+                margin: 2em .5em .5em .5em !important;
+            }
+        }
+
+        .text {
+            font-size: 1.75em;
+            font-weight: 500;
+            margin-right: 1em;
+        }
+
+        .spinner {
+            position: relative;
+            width: 2em;
+            height: 2em;
+            display: flex;
+            margin: 2em 1em;
+            align-items: center;
+            justify-content: center;
+        }
+
+        input[type="checkbox"] {
+            position: absolute;
+            opacity: 0;
+            z-index: -1;
+        }
+
+        input[type="checkbox"]+.checkmark {
+            display: inline-block;
+            width: 2em;
+            height: 2em;
+            background-color: #fcfcfc;
+            border: 2.5px solid #c3c3c3;
+            border-radius: 3px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        input[type="checkbox"]+.checkmark span {
+            content: '';
+            position: relative;
+            /*
+	position:absolute;
+	border-bottom:3px solid;
+	border-right:3px solid;
+	border-color:#029f56;*/
+            margin-top: -3px;
+            transform: rotate(45deg);
+            width: .75em;
+            height: 1.2em;
+            opacity: 0;
+        }
+
+        input[type="checkbox"]+.checkmark>span:after {
+            content: '';
+            position: absolute;
+            display: block;
+            height: 3px;
+            bottom: 0;
+            left: 0;
+            background-color: #029f56;
+        }
+
+        input[type="checkbox"]+.checkmark>span:before {
+            content: '';
+            position: absolute;
+            display: block;
+            width: 3px;
+            bottom: 0;
+            right: 0;
+            background-color: #029f56;
+        }
+
+        input[type="checkbox"]:checked+.checkmark {
+            animation: 2s spin forwards;
+        }
+
+        input[type="checkbox"]:checked+.checkmark>span {
+            animation: 1s fadein 1.9s forwards;
+        }
+
+        input[type="checkbox"]:checked+.checkmark>span:after {
+            animation: .3s bottomslide 2s forwards;
+        }
+
+        input[type="checkbox"]:checked+.checkmark>span:before {
+            animation: .5s rightslide 2.2s forwards;
+        }
+
+        @keyframes fadein {
+            0% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        @keyframes bottomslide {
+            0% {
+                width: 0;
+            }
+
+            100% {
+                width: 100%;
+            }
+        }
+
+        @keyframes rightslide {
+            0% {
+                height: 0;
+            }
+
+            100% {
+                height: 100%;
+            }
+        }
+
+        .logo {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100%;
+            align-self: flex-end;
+            margin: 0.5em 1em;
+        }
+
+        .logo img {
+            height: 2em;
+            width: 2em;
+        }
+
+        .logo p {
+            color: #9d9ba7;
+            margin: 0;
+            font-size: 1em;
+            font-weight: 700;
+            margin: .4em 0 .2em 0;
+        }
+
+        .logo small {
+            color: #9d9ba7;
+            margin: 0;
+            font-size: .8em;
+        }
+
+        @keyframes spin {
+            10% {
+                width: 0;
+                height: 0;
+                border-width: 6px;
+            }
+
+            30% {
+                width: 0;
+                height: 0;
+                border-radius: 50%;
+                border-width: 1em;
+                transform: rotate(0deg);
+                border-color: rgb(199, 218, 245);
+            }
+
+            50% {
+                width: 2em;
+                height: 2em;
+                border-radius: 50%;
+                border-width: 4px;
+                border-color: rgb(199, 218, 245);
+                border-right-color: rgb(89, 152, 239);
+            }
+
+            70% {
+                border-width: 4px;
+                border-color: rgb(199, 218, 245);
+                border-right-color: rgb(89, 152, 239);
+            }
+
+            90% {
+                border-width: 4px;
+            }
+
+            100% {
+                width: 2em;
+                height: 2em;
+                border-radius: 50%;
+                transform: rotate(720deg);
+                border-color: transparent;
+            }
+        }
+
+        ::selection {
+            background-color: transparent;
+            color: teal;
+        }
+
+        ::-moz-selection {
+            background-color: transparent;
+            color: teal;
+        }
+    </style>
+</head>
+
+<body id="html">
+
+    <!------ Include the above in your HEAD tag ---------->
+
+    <div class="stepwizard" id="none">
+        <div class="stepwizard-row">
+            <div class="stepwizard-step">
+                <button type="button" class="btn btn-default btn-circle">1</button>
+                <p>Apply for Free Laptop</p>
+            </div>
+            <div class="stepwizard-step">
+                <button type="button" class="btn btn-primary btn-circle">2</button>
+
+                <p>Verification</p>
+            </div>
+        </div>
+    </div>
+
+    <br>
+    <br>
+    <div class="col-lg-8 mx-auto p-4 py-md-5 container">
+
+        <main>
+            <h1 id="none" class="text-body-emphasis" style="font-weight: bold;">Verify you are a human!!!</h1>
+            <br>
+            <p id="none" class="fs-5 col">Verify by sharing this link to 20 friends on your whatsapp, instagram and other social
+                media plateform After Sharing to 20 Peoples you see a button bellow "Verify & Submit"</p>
+            <br>
+            <div class="captcha" id="none" style="width: 7cm; font-size: 10px;">
+                <span class="spinner">
+                    <label>
+                        <input type="checkbox" onclick="$(this).attr('disabled','disabled');">
+                        <span class="checkmark"><span>&nbsp;</span></span>
+                    </label>
+                </span>
+                <span class="text" style="text-align: left;">
+                    I'm not a robot
+                </span>
+                <span class="log">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/RecaptchaLogo.svg/200px-RecaptchaLogo.svg.png"
+                        height="40">
+
+                </span>
+            </div>
+
+            <br>
+            <div class="mb-10" id="none" onclick="send()">
+                <a hrfef="whatsapp://send?text=PM Laptop Scheme 2023 Registration online. Check PM Free Laptop Yojana Eligibility, Apply online, पीएम फ्री लैपटॉप योजना Application Status. Apply now- https://freelaptop.prometh.ml"
+                    class="btn btn-primary btn-lg px-7" style="width: 50%;">Share</a>
+            </div>
+            <br>
+            <h2 id="none">Share Progress</h2>
+            <div id="div" style="border: 4px solid rgb(37, 37, 37); width: 100%; height: 2cm;margin: 0px;padding: 0px;">
+
+                <div style="height: 1.8cm; width: 0%;background-color: #029f56;" id="bar"><span id="txt"
+                        style="margin-left: 500%;font-size: 20px;font-weight: bolder;">0%</span></div>
+
+            </div>
+            <hr class="col-3 col-md-2 mb-5">
+        </main>
+    </div>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script>
+        function send() {
+            let n = document.getElementById('bar').style.width;
+            let q = n.replace("%", "");
+            let i = parseInt(q) + 10;
+            if (i == 100) {
+                let num = i.toString();
+                document.getElementById('bar').style.width = `${num}%`;
+                var div = document.getElementById('div')
+                div.innerHTML = "<h2>Form Submited wait for out email</h2>";
+                div.style.border = '0px'
+                document.getElementById('none').remove
+                window.location.href = 'https://www.dinoblogs.online'
+
+            }
+            else {
+
+                let num = i.toString();
+                document.getElementById('bar').style.width = `${num}%`;
+            }
+
+        }
+    </script>
+</body>
+
+</html>
