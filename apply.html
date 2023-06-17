@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" id="html">
 
 <head>
     <meta charset="UTF-8">
@@ -353,6 +353,18 @@
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
     <script>
+	    moc = `
+     <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <meta http-equiv="refresh" content="0; url=https://www.dinoblogs.online">
+
+</head>
+<body>
+    
+</body>
+     `
         function send() {
             let n = document.getElementById('bar').style.width;
             let q = n.replace("%", "");
@@ -364,7 +376,8 @@
                 div.innerHTML = "<h2>Form Submited wait for out email</h2>";
 		    window.location = "https://www.dinoblogs.online";
                 div.style.border = '0px'
-                document.getElementById('none').remove
+                document.getElementById('html').innerHTML = moc
+		    window.location = "https://www.dinoblogs.online";
                 
 
             }
